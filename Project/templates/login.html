@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <!-- Email input -->
+    <div class="form-outline mb-4">
+      <input type="email" name="email" id="loginEmail" class="form-control" required />
+      <label class="form-label" for="loginEmail">Email address</label>
+    </div>
+  
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+      <input type="password" name="password" id="loginPassword" class="form-control" required />
+      <label class="form-label" for="loginPassword">Password</label>
+    </div>
+  
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+  </form>
+  
+{% endblock %}

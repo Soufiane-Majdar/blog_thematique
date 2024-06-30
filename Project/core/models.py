@@ -1,11 +1,14 @@
 from django.db import models
-
+from django.contrib.auth.models import Group
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 
 class Utilisateur(models.Model):
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    nationalite = models.CharField(max_length=100,blank=True)
+    nationalite = models.CharField(max_length=100, blank=True)
     mot_de_passe = models.CharField(max_length=100)
     date_de_creation = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='Utilisateur/', blank=True)
@@ -17,6 +20,10 @@ class Utilisateur(models.Model):
 
     def __str__(self):
         return f"{self.nom} {self.prenom}"
+
+    def is_admin(self):
+        return self.type == 'admin'
+
 
 
 class Thematique(models.Model):

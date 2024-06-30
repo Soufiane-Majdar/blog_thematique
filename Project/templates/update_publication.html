@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Publication{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Update Publication</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="titre" class="form-label">Title</label>
+            <input type="text" class="form-control" id="titre" name="titre" value="{{ publication.titre }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="resume" class="form-label">Summary</label>
+            <textarea class="form-control" id="resume" name="resume" rows="5" required>{{ publication.resume }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="fichier_pdf" class="form-label">PDF File</label>
+            <input type="file" class="form-control-file" id="fichier_pdf" name="fichier_pdf">
+            {% if publication.fichier_pdf %}
+                <p class="mt-2">Current File: <a href="{{ publication.fichier_pdf.url }}" target="_blank">{{ publication.fichier_pdf.name }}</a></p>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+            {% if publication.image %}
+                <p class="mt-2">Current Image: <img src="{{ publication.image.url }}" class="img-thumbnail" style="max-width: 200px;"></p>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="thematiques" class="form-label">Themes</label>
+            <select multiple class="form-control" id="thematiques" name="thematiques">
+                {% for thematique in thematiques %}
+                <option value="{{ thematique.id }}">{{ thematique.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Publication</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}

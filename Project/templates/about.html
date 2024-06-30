@@ -58,6 +58,40 @@
             </section>
         </div>
     
-
+                <!-- Side widgets-->
+                <div class="col-lg-4">
+                    <!-- Search form -->
+                    <form method="GET" action="{% url 'home' %}">
+                        <div class="card mb-4">
+                            <div class="card-header">Search</div>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="q" placeholder="Enter search term..." value="{{ request.GET.q }}" aria-label="Enter search term..." aria-describedby="button-search" />
+                                    <button class="btn btn-primary" id="button-search" type="submit">Go!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                <!-- Categories widget -->
+                <div class="card mb-4">
+                    <div class="card-header">Thematiques</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <ul class="list-unstyled mb-0">
+                                    {% for thematique in thematiques %}
+                                    <li><a href="{%url 'home'%}?categorie={{ thematique.nom }}">{{ thematique.nom }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+            </div>
+            
+       
 
 {% endblock %}

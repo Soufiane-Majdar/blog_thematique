@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <!-- Profile Image -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="{% if user.image %}/media/{{ user.image }}{% else %}https://via.placeholder.com/150{% endif %}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                    <h5 class="my-3">{{ user.nom }} {{ user.prenom }}</h5>
+                    <p class="text-muted mb-1">{{ user.type }}</p>
+                    <p class="text-muted mb-4">{{ user.nationalite }}</p>
+                    <div class="d-flex justify-content-center mb-2">
+                        <a href="#editProfileModal" class="btn btn-primary" data-bs-toggle="modal">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <!-- Profile Details -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Full Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{{ user.nom }} {{ user.prenom }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{{ user.email }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Nationality</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{{ user.nationalite }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Account Created</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">{{ user.date_de_creation }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Publications</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Summary</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for publication in publications %}
+                    <tr>
+                        <td>{{ publication.titre }}</td>
+                        <td>{{ publication.resume }}</td>
+                        <td>{{ publication.date_de_publication }}</td>
+                        <td>
+                            <a href="{% url 'update_publication' publication.id %}" class="btn btn-sm btn-primary">Update</a>
+                            <form method="post" action="{% url 'delete_publication' publication.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{% url 'update_profile' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Image input -->
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Profile Image</label>
+                        <input class="form-control" type="file" id="image" name="image">
+                    </div>
+                    <!-- Name input -->
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="nom" name="nom" value="{{ user.nom }}" required>
+                    </div>
+                    <!-- Last Name input -->
+                    <div class="mb-3">
+                        <label for="prenom" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="prenom" name="prenom" value="{{ user.prenom }}" required>
+                    </div>
+                    <!-- Email input -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <!-- Nationality input -->
+                    <div class="mb-3">
+                        <label for="nationalite" class="form-label">Nationality</label>
+                        <input type="text" class="form-control" id="nationalite" name="nationalite" value="{{ user.nationalite }}">
+                    </div>
+                    <!-- Password input -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
